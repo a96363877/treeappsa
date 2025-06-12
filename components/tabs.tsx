@@ -26,7 +26,7 @@ export function Tabs() {
   ]
 
   return (
-    <div className="flex rounded-2xl overflow-hidden shadow-lg" dir="rtl">
+    <div className="flex rounded-2xl overflow-hidden shadow-lg">
       {tabs.map((tab, index) => (
         <button
           key={tab.id}

@@ -1,166 +1,100 @@
-'use client';
+"use client"
 
-import { useState } from 'react';
-import Image from 'next/image';
-import { cn } from '@/lib/utils';
-import { Button } from '@/components/ui/button';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Input } from '@/components/ui/input';
-import { ChevronRight } from 'lucide-react';
+import type React from "react"
 
-export default function Home() {
-  const [currentTab, setCurrentTab] = useState('tab3');
+import Image from "next/image"
+import { Facebook, Instagram, Linkedin, Twitter, Shield, Phone, Mail } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react"
+import { Tabs } from "@/components/ui/tabs"
+import { InsuranceTabs } from "@/components/insurance-tabs"
+import { InsuranceFlow } from "@/components/insurance-flow"
+
+export default function Component() {
+  const [isLoading, setIsLoading] = useState(false)
+  const [formData, setFormData] = useState({
+    serialNumber: "",
+    idNumber: "",
+    birthDate: "",
+  })
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    setIsLoading(true)
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    setIsLoading(false)
+  }
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#004040] text-white max-w-md mx-auto">
-      {/* Header */}
+    <div
+      className="min-h-screen bg-gradient-to-br from-emerald-700 via-emerald-900 to-emerald-800 text-white overflow-hidden"
+      dir="rtl"
+    >
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-emerald-400/10 rounded-full blur-3xl animate-pulse"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-emerald-300/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      </div>
+
+
+      {/* Language Toggle */}
+      <div className="flex justify-end px-6 mb-6">
+        <div className="bg-emerald-700/80 backdrop-blur-sm rounded-full px-4 py-2 text-sm flex items-center gap-3 shadow-lg border border-emerald-600/30">
+          <span className="font-medium">بالعربية</span>
+          <div className="w-5 h-5 bg-emerald-400 rounded-full shadow-inner animate-pulse"></div>
+        </div>
+      </div>
 
       {/* Main Content */}
-      <Tabs
-        defaultValue="tab3"
-        value={currentTab}
-        onValueChange={setCurrentTab}
-        className="flex-1 flex flex-col"
-      >
-        <TabsList className="hidden">
-          <TabsTrigger value="tab1">Tab 1</TabsTrigger>
-          <TabsTrigger value="tab2">Tab 2</TabsTrigger>
-          <TabsTrigger value="tab3">Tab 3</TabsTrigger>
-        </TabsList>
-
-        {/* Tab Content */}
-        <div className="flex-1 flex flex-col">
-          {/* Tawuniya Logo */}
-          <div className="flex justify-end p-4">
-            <div className="flex items-center gap-2 bg-gray-400/20 rounded-full py-1 px-3">
-              <span className="text-xs">تأمين لـ</span>
-              <div className="bg-white rounded-full p-1 flex items-center justify-center w-6 h-6">
-                <Image
-                  src="/th.svg"
-                  alt="Tawuniya"
-                  width={20}
-                  height={20}
-                  className="object-contain"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Hero Section */}
-          <div className="text-center p-4 space-y-2 rtl">
-            <h1 className="text-xl font-bold">
-              ما في أحلى من الحرية، سوق الحين براحتك
-            </h1>
-            <p className="text-sm">
-              لا تفوت الفرصة. أمّن سيارتك بأفضل الأسعار!
-            </p>
-          </div>
-
-          {/* Car Image Section */}
-          <div className="relative p-4">
-            <div className=" h-36 m-4 rounded-3xl"></div>
-            <div className="absolute inset-0 flex justify-center items-center">
-              <img
-                src="/motor_bg_ar.png"
-                alt="SUV"
-                width={300}
-                height={180}
-                className="object-contain"
-              />
-            </div>
-          </div>
-
-          {/* Tab Navigation */}
-          <div className="flex justify-center gap-2 px-4 py-2 rtl">
-            <Button
-              variant="ghost"
-              className={cn(
-                'rounded-full flex items-center gap-1 text-sm px-3 py-1 h-auto',
-                currentTab === 'tab1' && 'bg-white/10'
-              )}
-              onClick={() => setCurrentTab('tab1')}
-            >
-              <span className="bg-white rounded-full p-1 text-black flex items-center justify-center w-5 h-5">
-                <ChevronRight className="h-3 w-3" />
-              </span>
-              <span>تجديد الوثيقة</span>
-            </Button>
-            <Button
-              variant="ghost"
-              className={cn(
-                'rounded-full flex items-center gap-1 text-sm px-3 py-1 h-auto',
-                currentTab === 'tab2' && 'bg-white/10'
-              )}
-              onClick={() => setCurrentTab('tab2')}
-            >
-              <span>نقل الملكية</span>
-            </Button>
-            <Button
-              variant="ghost"
-              className={cn(
-                'rounded-full flex items-center gap-1 text-sm px-3 py-1 h-auto',
-                currentTab === 'tab3' && 'bg-white/10'
-              )}
-              onClick={() => setCurrentTab('tab3')}
-            >
-              <span>تأمين جديد</span>
-            </Button>
-          </div>
-
-          {/* Form Content */}
-          <div className="p-4 space-y-4 rtl">
-            <TabsContent value="tab1" className="m-0 space-y-4">
-              <Input
-                placeholder="الرقم التسلسلي"
-                className="bg-[#003030] border-none text-right h-12 rounded-md"
-              />
-              <Input
-                placeholder="رقم الهوية / الإقامة"
-                className="bg-[#003030] border-none text-right h-12 rounded-md"
-              />
-            </TabsContent>
-
-            <TabsContent value="tab2" className="m-0 space-y-4">
-              <Input
-                placeholder="الرقم التسلسلي"
-                className="bg-[#003030] border-none text-right h-12 rounded-md"
-              />
-              <Input
-                placeholder="رقم هوية / إقامة البائع"
-                className="bg-[#003030] border-none text-right h-12 rounded-md"
-              />
-              <Input
-                placeholder="رقم الهوية / الإقامة"
-                className="bg-[#003030] border-none text-right h-12 rounded-md"
-              />
-            </TabsContent>
-
-            <TabsContent value="tab3" className="m-0 space-y-4">
-              <Input
-                placeholder="الرقم التسلسلي/ بطاقة جمركية"
-                className="bg-[#003030] border-none text-right h-12 rounded-md"
-              />
-              <Input
-                placeholder="رقم الهوية / الإقامة"
-                className="bg-[#003030] border-none text-right h-12 rounded-md"
-              />
-              <Input
-                placeholder="شهر / سنة الميلاد"
-                className="bg-[#003030] border-none text-right h-12 rounded-md"
-              />
-            </TabsContent>
-
-            <Button className="w-full bg-[#00E0A0] hover:bg-[#00C090] text-black font-bold h-12 rounded-md">
-              أمّن سيارتك
-            </Button>
-
-            <p className="text-xs text-center rtl text-gray-300">
-              بالنقر على "أمّن سيارتك"، فإنني أمنح وكالة شركة (تري) للتأمين
-              الرقمي إمكانية الوصول إلى معلوماتي.
-            </p>
+      <div className="relative z-10 px-6 pb-8">
+        {/* Hero Text */}
+        <div className="text-center mb-12 space-y-4">
+          <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-relaxed bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
+            ما في أحلى من الحرية، سوق الحين براحتك
+          </h1>
+          <p className="text-emerald-200 text-lg font-medium max-w-md mx-auto leading-relaxed">
+            لا تفوت الفرصة، أمن سيارتك بأفضل الأسعار
+          </p>
+          <div className="flex items-center justify-center gap-2 text-emerald-300 text-sm">
+            <Shield className="w-4 h-4" />
+            <span>حماية شاملة وموثوقة</span>
           </div>
         </div>
-      </Tabs>
+
+        {/* Car Illustration */}
+        <div className="relative mb-12">
+          <div className=" rounded-3xl p-8 mx-4 shadow-2xl transform hover:scale-105 transition-transform duration-500">
+            <div className="relative">
+              <img
+                src="/motor_bg_ar.png"
+                alt="car"
+                width={350}
+                height={220}
+                className="w-full h-auto drop-shadow-2xl"
+              />
+              {/* Floating Elements */}
+              <div className="absolute -top-4 -right-4 w-8 h-8 bg-emerald-500 rounded-full animate-bounce delay-300"></div>
+              <div className="absolute -bottom-2 -left-4 w-6 h-6 bg-emerald-600 rounded-full animate-bounce delay-700"></div>
+            </div>
+          </div>
+
+        {/* Insurance Form with Tabs */}
+        <div className="max-w-md mx-auto text-right" >
+          <InsuranceFlow />
+        </div>
+        </div>
+
+        {/* Enhanced Disclaimer */}
+        <div className="text-center text-sm text-emerald-300/80 leading-relaxed px-6 py-4 bg-emerald-900/30 rounded-xl backdrop-blur-sm border border-emerald-700/30">
+          <Shield className="w-4 h-4 inline-block ml-2" />
+          بالنقر على "أمن سيارتك"، فإنني أمنح وكالة شركة (تري) للتأمين الرقمي إمكانية الوصول إلى معلوماتي.
+        </div>
+      </div>
+
+    
     </div>
-  );
+  )
 }

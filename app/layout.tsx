@@ -40,7 +40,6 @@ export default function RootLayout({
                 >
                   ع
                 </Button>
-                <span className="text-xs">EN</span>
               </div>
               <div className="text-[#00E0A0] text-3xl font-bold ml-auto">
                 tree
