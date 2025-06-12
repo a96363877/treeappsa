@@ -32,7 +32,7 @@ export function Step3PlanSelection({ formData, updateFormData, onNext, onBack }:
     return offerData
       .filter((offer) => offer.type === targetType)
       .sort((a, b) => Number.parseFloat(a.main_price) - Number.parseFloat(b.main_price))
-      .slice(0, 6) // Show top 6 offers
+      .slice(0, 12) // Show top 12 offers
   }
 
   const filteredOffers = getFilteredOffers()

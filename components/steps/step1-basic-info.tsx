@@ -69,6 +69,9 @@ export function Step1BasicInfo({ formData, updateFormData, onNext }: Step1Props)
                 onChange={(e) => updateFormData({ serialNumber: e.target.value })}
                 className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
                 required
+                type="tel"
+                maxLength={12}
+                dir="rtl"
               />
               <Input
                 placeholder="رقم الهوية / رقم الإقامة"
@@ -76,6 +79,9 @@ export function Step1BasicInfo({ formData, updateFormData, onNext }: Step1Props)
                 onChange={(e) => updateFormData({ idNumber: e.target.value })}
                 className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
                 required
+                type="tel"
+                maxLength={12}
+                dir="rtl"
               />
               <Input
                 placeholder="شهر / سنة الميلاد"
@@ -83,6 +89,8 @@ export function Step1BasicInfo({ formData, updateFormData, onNext }: Step1Props)
                 onChange={(e) => updateFormData({ birthDate: e.target.value })}
                 className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
                 required
+                type="date"
+                dir="rtl"
               />
             </>
           )}
@@ -94,6 +102,9 @@ export function Step1BasicInfo({ formData, updateFormData, onNext }: Step1Props)
               onChange={(e) => updateFormData({ idNumber: e.target.value })}
               className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
               required
+              type="tel"
+              maxLength={12}
+              dir="rtl"
             />
           )}
 
@@ -105,11 +116,17 @@ export function Step1BasicInfo({ formData, updateFormData, onNext }: Step1Props)
                 onChange={(e) => updateFormData({ idNumber: e.target.value })}
                 className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
                 required
+                type="tel"
+                maxLength={12}
+                dir="rtl"
               />
               <Input
                 placeholder="رقم الوثيقة"
                 className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
                 required
+                type="tel"
+                maxLength={12}
+                dir="rtl"
               />
             </>
           )}
