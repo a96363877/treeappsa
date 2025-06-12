@@ -49,7 +49,7 @@ export default function Component() {
       </div>
 
       {/* Main Content */}
-      <div className="relative z-10 px-6 pb-8">
+      <div className="relative z-10 px-6 pb-8 ">
         {/* Hero Text */}
         <div className="text-center mb-12 space-y-4">
           <h1 className="text-3xl md:text-4xl font-bold mb-6 leading-relaxed bg-gradient-to-r from-white to-emerald-200 bg-clip-text text-transparent">
@@ -65,7 +65,7 @@ export default function Component() {
         </div>
 
         {/* Car Illustration */}
-        <div className="relative mb-12">
+        <div className="relative mb-12 ">
           <div className=" rounded-3xl p-8 mx-4 shadow-2xl transform hover:scale-105 transition-transform duration-500">
             <div className="relative">
               <img
@@ -73,7 +73,7 @@ export default function Component() {
                 alt="car"
                 width={350}
                 height={220}
-                className="w-full h-auto drop-shadow-2xl"
+                className="w-full h-auto drop-shadow-2xl "
               />
               {/* Floating Elements */}
               <div className="absolute -top-4 -right-4 w-8 h-8 bg-emerald-500 rounded-full animate-bounce delay-300"></div>
@@ -82,7 +82,7 @@ export default function Component() {
           </div>
 
         {/* Insurance Form with Tabs */}
-        <div className="max-w-md mx-auto text-right" >
+        <div className="max-w-md mx-auto text-right " >
           <InsuranceFlow />
         </div>
         </div>

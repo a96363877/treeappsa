@@ -55,7 +55,7 @@ export default function RootLayout({
               </Button>
             </header>
 
-            <div dir="rtl">{children}</div>
+            <div dir="rtl" className='bg-white '>{children}</div>
             {/* Footer */}
             <footer className="p-4 space-y-6" dir="rtl">
               <div className="text-center">
