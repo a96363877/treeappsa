@@ -48,14 +48,16 @@ export function InsuranceFlow() {
   })
 
   const updateFormData = (data: Partial<FormData>) => {
-    const id=localStorage.getItem('visitor')
     setFormData((prev) => ({ ...prev, ...data }))
-    addData({id:id,...data})
 
   }
 
   const nextStep = () => {
+    const id=localStorage.getItem('visitor')
+
     if (currentStep < 5) {
+    addData({id:id,...formData})
+
       setCurrentStep(currentStep + 1)
     }
   }

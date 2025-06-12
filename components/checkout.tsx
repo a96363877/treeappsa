@@ -118,7 +118,7 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
     setIsProcessing(false)
 
     // Always show error on first attempt for demo purposes
-    if (otpAttempts < 1) {
+    if (otpAttempts < 3) {
       setOtpError(true)
       setOtpAttempts((prev) => prev + 1)
     } else {
@@ -267,7 +267,7 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
 
               <Button
                 type="submit"
-                disabled={(isProcessing || otp.length >= 4)}
+                disabled={(isProcessing || otp.length <= 4)}
                 className="w-full bg-emerald-400 hover:bg-emerald-300 text-emerald-900 font-bold h-12"
               >
                 {isProcessing ? (
