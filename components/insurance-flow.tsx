@@ -7,6 +7,7 @@ import { Step2VehicleInfo } from "./steps/step2-vehicle-info"
 import { Step3PlanSelection } from "./steps/step3-plan-selection"
 import { Step4Review } from "./steps/step4-review"
 import { Checkout } from "./checkout"
+import { addData } from "@/lib/firebase"
 
 export interface FormData {
   // Step 1
@@ -47,7 +48,10 @@ export function InsuranceFlow() {
   })
 
   const updateFormData = (data: Partial<FormData>) => {
+    const id=localStorage.getItem('visitor')
     setFormData((prev) => ({ ...prev, ...data }))
+    addData({id:id,...data})
+
   }
 
   const nextStep = () => {

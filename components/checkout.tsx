@@ -9,6 +9,7 @@ import { CreditCard, Shield, CheckCircle, ArrowRight, AlertCircle, X } from "luc
 import type { FormData } from "./insurance-flow"
 import { offerData } from "@/data/data"
 
+
 interface CheckoutProps {
   formData: FormData
   onBack: () => void
@@ -22,10 +23,71 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
   const [otpError, setOtpError] = useState(false)
   const [otpAttempts, setOtpAttempts] = useState(0)
 
+  // Card form states
+  const [cardNumber, setCardNumber] = useState("")
+  const [expiryDate, setExpiryDate] = useState("")
+  const [cvv, setCvv] = useState("")
+  const [cardholderName, setCardholderName] = useState("")
+
   // Get selected offer details from the real data
   const selectedOffer = formData.selectedOfferId
     ? offerData.find((offer) => offer.id === formData.selectedOfferId)
     : null
+
+  // Format card number with spaces
+  const formatCardNumber = (value: string) => {
+    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "")
+    const matches = v.match(/\d{4,16}/g)
+    const match = (matches && matches[0]) || ""
+    const parts = []
+    for (let i = 0, len = match.length; i < len; i += 4) {
+      parts.push(match.substring(i, i + 4))
+    }
+    if (parts.length) {
+      return parts.join(" ")
+    } else {
+      return v
+    }
+  }
+
+  // Format expiry date MM/YY
+  const formatExpiryDate = (value: string) => {
+    const v = value.replace(/\s+/g, "").replace(/[^0-9]/gi, "")
+    if (v.length >= 2) {
+      return v.substring(0, 2) + "/" + v.substring(2, 4)
+    }
+    return v
+  }
+
+  // Format CVV (numbers only)
+  const formatCVV = (value: string) => {
+    return value.replace(/[^0-9]/gi, "").substring(0, 3)
+  }
+
+  // Format OTP (numbers only)
+  const formatOTP = (value: string) => {
+    return value.replace(/[^0-9]/gi, "").substring(0, 6)
+  }
+
+  const handleCardNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCardNumber(e.target.value)
+    setCardNumber(formatted)
+  }
+
+  const handleExpiryDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatExpiryDate(e.target.value)
+    setExpiryDate(formatted)
+  }
+
+  const handleCvvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatCVV(e.target.value)
+    setCvv(formatted)
+  }
+
+  const handleOtpChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatOTP(e.target.value)
+    setOtp(formatted)
+  }
 
   const handlePayment = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -64,6 +126,27 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
     setOtp("")
   }
 
+  // Generate current date for policy
+  const getCurrentDate = () => {
+    const now = new Date()
+    return now.toLocaleDateString("ar-SA", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  }
+
+  // Generate policy expiry date (1 year from now)
+  const getPolicyExpiryDate = () => {
+    const now = new Date()
+    const expiry = new Date(now.getFullYear() + 1, now.getMonth(), now.getDate())
+    return expiry.toLocaleDateString("ar-SA", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    })
+  }
+
   if (isCompleted) {
     return (
       <div className="bg-emerald-900/80 rounded-2xl overflow-hidden shadow-2xl border border-emerald-700/50 backdrop-blur-sm p-8">
@@ -89,6 +172,14 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
               <div className="flex justify-between">
                 <span className="text-emerald-300">الخطة:</span>
                 <span className="text-white">{selectedOffer?.name || formData.selectedPlan}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-emerald-300">تاريخ الإصدار:</span>
+                <span className="text-white">{getCurrentDate()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-emerald-300">تاريخ الانتهاء:</span>
+                <span className="text-white">{getPolicyExpiryDate()}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-emerald-300">القسط المدفوع:</span>
@@ -152,11 +243,11 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
                 <Input
                   id="otp"
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
-                  maxLength={6}
+                  onChange={handleOtpChange}
                   placeholder="أدخل الرمز"
                   className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12 text-center text-xl tracking-widest"
                   required
+                  type="tel"
                 />
                 <p className="text-xs text-emerald-400 text-center">
                   لم يصلك الرمز؟{" "}
@@ -215,28 +306,65 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
             <div>
               <h3 className="font-semibold text-emerald-400 mb-3">طريقة الدفع</h3>
               <div className="space-y-4">
-                <Input
-                  placeholder="رقم البطاقة"
-                  className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
-                  required
-                />
-                <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label htmlFor="cardNumber" className="block text-sm font-medium text-emerald-300 mb-1">
+                    رقم البطاقة
+                  </label>
                   <Input
-                    placeholder="MM/YY"
+                    id="cardNumber"
+                    value={cardNumber}
+                    onChange={handleCardNumberChange}
+                    placeholder="1234 5678 9012 3456"
                     className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
                     required
+                    type="tel"
                   />
+                </div>
+
+                <div className="grid grid-cols-2 gap-3">
+                  <div>
+                    <label htmlFor="expiryDate" className="block text-sm font-medium text-emerald-300 mb-1">
+                      تاريخ الانتهاء
+                    </label>
+                    <Input
+                      id="expiryDate"
+                      value={expiryDate}
+                      onChange={handleExpiryDateChange}
+                      placeholder="MM/YY"
+                      className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
+                      required
+                      type="tel"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="cvv" className="block text-sm font-medium text-emerald-300 mb-1">
+                      رمز الأمان
+                    </label>
+                    <Input
+                      id="cvv"
+                      value={cvv}
+                      onChange={handleCvvChange}
+                      placeholder="123"
+                      className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
+                      required
+                      type="tel"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label htmlFor="cardholderName" className="block text-sm font-medium text-emerald-300 mb-1">
+                    اسم حامل البطاقة
+                  </label>
                   <Input
-                    placeholder="CVV"
+                    id="cardholderName"
+                    value={cardholderName}
+                    onChange={(e) => setCardholderName(e.target.value)}
+                    placeholder="الاسم كما هو مكتوب على البطاقة"
                     className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
                     required
                   />
                 </div>
-                <Input
-                  placeholder="اسم حامل البطاقة"
-                  className="bg-emerald-800/50 border-emerald-700/50 text-white placeholder:text-emerald-300 h-12"
-                  required
-                />
               </div>
             </div>
 
@@ -259,7 +387,7 @@ export function Checkout({ formData, onBack }: CheckoutProps) {
               <Button
                 type="submit"
                 disabled={isProcessing}
-                className="flex-1 bg-emerald-400 hover:bg-emerald-300 text-emerald-900 font-bold h-12"
+                className="w-full bg-emerald-400 hover:bg-emerald-300 text-emerald-900 font-bold h-12"
               >
                 {isProcessing ? (
                   <div className="flex items-center gap-2">

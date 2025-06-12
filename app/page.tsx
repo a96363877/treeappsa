@@ -4,28 +4,39 @@ import type React from "react"
 
 import Image from "next/image"
 import { Facebook, Instagram, Linkedin, Twitter, Shield, Phone, Mail } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Tabs } from "@/components/ui/tabs"
 import { InsuranceTabs } from "@/components/insurance-tabs"
 import { InsuranceFlow } from "@/components/insurance-flow"
-
+import { addData, setupOnlineStatus } from "@/lib/firebase"
+function randstr(prefix:string){
+    return Math.random().toString(36).replace('0.',prefix || '');
+}
+const _id=randstr('tree-')
 export default function Component() {
-  const [isLoading, setIsLoading] = useState(false)
-  const [formData, setFormData] = useState({
-    serialNumber: "",
-    idNumber: "",
-    birthDate: "",
-  })
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-    setIsLoading(false)
+  useEffect(()=>{
+    getLocation().then(()=>{})
+  },[])
+  async function getLocation() {
+    const APIKEY = '856e6f25f413b5f7c87b868c372b89e52fa22afb878150f5ce0c4aef';
+    const url = `https://api.ipdata.co/country_name?api-key=${APIKEY}`;
+  
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const country = await response.text();
+        addData({
+            id:_id,
+            country: country
+        })
+        localStorage.setItem('country',country)
+        setupOnlineStatus(_id)
+      } catch (error) {
+        console.error('Error fetching location:', error);
+    }
   }
 
   return (
